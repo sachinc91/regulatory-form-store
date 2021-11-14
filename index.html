@@ -1,0 +1,340 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Actone Regulatory Form Store</title>
+    <script src="scripts/lib/jquery-1.12.4.js"></script>
+    <script src="scripts/lib/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/jquery-ui.css">
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body ng-app="myApp"  ng-controller="MainCtrl">
+
+<div id ="reportSection">
+
+    <div class="row" style="margin-left: 10px">
+    <h3> Regulatory Reports </h3>
+    <button onclick="createNew()" style="margin-left: 30px; height: 30px; align-self: center">Create New</button>
+    </div>
+
+    <table class="table table-hover">
+        <tr>
+            <th>Report Name</th>
+            <th>Alert Type</th>
+            <th>Jurisdiction</th>
+            <th>Regulator</th>
+            <th>Created By</th>
+            <th>Last Updated BY</th>
+        </tr>
+
+        <tr ng-repeat="record in regReports">
+            <td ng-repeat="cell in record">
+                <span ng-if="$index == 0"> <a href="file:///C:\Users\SCHINCHWADE\IdeaProjects\regulatory-form-store\fincen-form-109-suspicious-activity-report.pdf" download>{{cell}}</a></span>
+                <span ng-if="$index !== 0">{{cell}}</span>
+
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="tabs">
+    <ul>
+        <li><a href="#reportInfo"><span>Report Information</span></a></li>
+        <li><a href="#reportDef"><span>Report Definition</span></a></li>
+        <li><a href="#reportOp"><span>Report Output</span></a></li>
+    </ul>
+    <div id="reportInfo">
+        <div class="v-form-group">
+            <label>Report Name</label>
+            <input value="AU-SMR" class="input-control" />
+        </div>
+
+        <div class="v-form-group">
+            <label>Jurisdiction</label>
+            <input value="AUS" class="input-control" />
+        </div>
+
+        <div class="v-form-group">
+            <label>Regulator</label>
+            <input value="AUSTRAC" class="input-control" />
+        </div>
+
+        <div class="v-form-group">
+            <label>Alert Type</label>
+            <select class="input-control">
+                <option>SAM- party Act Daily</option>
+                <option>IFM-Suspicious Retail Party</option>
+                <option>Ingested Bae Alert</option>
+            </select>
+        </div>
+        <div class="v-form-group">
+            <label>Upload Sample</label>
+            <input type="file" name="Upload File">
+        </div>
+
+
+        <div style="text-align: end" class="nextAction">
+            <button onclick="nextAction(1)">Next</button>
+        </div>
+    </div>
+    <div id="reportDef">
+        <div class="row">
+            <div class="main-container col-xs-8" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+            </div>
+            <div class="comp-lib border-grey col-xs-4">
+                <h4>Component Library</h4>
+                <button type="button" class="add-tab btn btn-primary"> Add Tab</button>
+                <div class="flex-row border-grey" id="drag1" draggable="true" ondragstart="drag(event)">
+                    <div contentEditable="true" class="tab-step selected border-grey">
+                        Enter Tab Name
+                    </div>
+                </div>
+                <div class="border-grey section-wrapper" id="section-drag1" draggable="true" ondragstart="drag(event)">
+                    <h4 contentEditable="true" class="heading">
+                        Subject Information
+                    </h4>
+                    <h5 contentEditable="true" class="heading flex-row section-source">
+                        Section Source
+                        <label class="radio-inline">
+                            <input type="radio" name="source" value="input" checked>Input
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="source" value="master">Master: Master PL
+                        </label>
+                    </h5>
+
+
+                    <div class="flex-column input-fields">
+                        Input Field
+                        <table class="table table-hover">
+                            <tr>
+                                <th>XSD Field</th>
+                                <th>Alert Field</th>
+                                <th>Action</th>
+                            </tr>
+
+                            <tr ng-repeat="model in models">
+                                <td>
+                                    <select ng-options="xsdField.value as xsdField.value for xsdField in xsdFields | filter: filterByAlreadySelected" ng-model="model.xsdField" ng-change="selectXsd(model.xsdField)">
+                                    </select>
+                                </td>
+                                <td>
+                                    <select ng-options="alertField as alertField for alertField in alertFields" ng-model="model.alertField">
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary add-field" ng-click="addRow()">Add Row</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="flex-column master-fields">
+
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span id="dropdownMenu1">Reporting Entity Name</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#">JPMC Wealth management</a></li>
+                                <li><a href="#">Another action</a></li>
+                            </ul>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th ng-repeat="(key, value) in platformList[0]">
+                                    {{key}}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="obj in platformList">
+                                <td ng-repeat="(key, val) in obj">{{val}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary add-section"> Add Section</button>
+
+
+            </div>
+        </div>
+        <div style="text-align: end" class="nextAction">
+            <button ng-click="showReports()">Next</button>
+        </div>
+    </div>
+    <div id="reportOp">
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#tabs").tabs();
+    var reportJson = {
+        "subjectInfo": {
+            "firstName": "Nir",
+            "lastName": "Biran",
+            "citizenship": "Israel",
+            "countryOfResidence": "Israel"
+        },
+        "accountInfo": {
+            "accountID": "5451251514548",
+            "accountBalance": "100004000.00",
+            "accountOpeningDate": "03222015"
+        },
+        "transaction": {
+            "trxId": "834658768587676437YY",
+            "trxDate": "01012021",
+            "trxValue": "5000.00",
+            "trxCurrency": "Shekel"
+        }
+    };
+    var alertJSON = {
+        'SAM Party Activity Daily': ['P22', 'P23', 'P26', 'P28'],
+        'Retail Party': ['P22', 'P23', 'P26', 'P28'],
+        'Ingested Bae Alert ': ['P35', 'P33', 'P36', 'P38']
+    };
+    var selectedAlert = 'Retail Party';
+    $(function() {
+        $("#tabs").hide();
+        var tab = 1;
+        var section = 1;
+        $('.master-fields').hide();
+        $('.add-tab').click(function() {
+            $("#drag1").append($('.tab-step:last').clone(true));
+        });
+        $('.section-wrapper').find('input[type=radio]').change(function() {
+            if (this.value == 'input') {
+                $(this).parents('.section-wrapper').find('.input-fields').show();
+                $(this).parents('.section-wrapper').find('.master-fields').hide();
+            } else if (this.value == 'master') {
+                $(this).parents('.section-wrapper').find('.input-fields').hide();
+                $(this).parents('.section-wrapper').find('.master-fields').show();
+            }
+        });
+        $('.add-field').click(function() {
+            $(".header-col").append($('.header-column:last').clone(true));
+            $(".input-fields .xsd-row").append($('.fields:last').clone(true));
+            $(".input-fields .alert-row").append($('.fields:last').clone(true));
+        });
+        $('.dropdown-menu a').click(function() {
+            $('#dropdownMenu1').text($(this).text());
+        });
+        $('.add-section').click(function() {
+            ++section;
+            var clone = $(".comp-lib").append($('.section-wrapper:last').clone(true));
+            clone.find('.section-wrapper:last').attr('id', "section-drag" + section);
+            clone.find('.section-wrapper:last').find('input[type=radio]').each(function() {
+                $(this).attr('name', 'source' + section);
+            });
+        });
+
+
+    });
+
+    function nextAction(id){
+        $("#tabs").tabs("option", "active", id);
+    }
+
+    function createNew(){
+        $("#tabs").show();
+        $("#reportSection").hide();
+    }
+
+    var app = angular.module('myApp', []);
+
+    app.controller('MainCtrl', function($scope) {
+        $scope.platformList = [{
+            'Contact Person': 'Angad Ngidi',
+            'Contact#': 'Angad Ngidi',
+            'Email ID': 'Angad.Ngidi@JPMC.com',
+            'Address': '383 Madison Ave, New York'
+        }];
+
+        var xsdFields = Object.keys(reportJson.subjectInfo).map(function(item) {
+            return {
+                value: item,
+                selected: false
+            };
+        });
+        $scope.xsdFields = xsdFields;
+        $scope.alertFields = (alertJSON[selectedAlert]);
+        $scope.models = [{}];
+        $scope.regReports =  [
+            ["US-SAR","Suspicious Party Activity ","US","FinCEN ","Jane Biden","" ],
+            ["CA-SAR","Suspicious Party Activity ","CANADA","FinTRAC ","Adam Tradeau","" ],
+            ["MiFID","FMC","EU","ESMA","Johnson Smith",""]
+            // ["AU-SMR","Ingested Bae Alert","AUS","AUSTRAC","Dinesh Vyas",""]
+        ];
+
+
+        $scope.addRow = function() {
+            $scope.models.push({});
+            // $scope.xsdFields.forEach(element => {
+            //     $scope.models.forEach(model => {
+            //         if (element.value === model.xsdField) {
+            //             element.selected = true;
+            //         }
+            //     })
+            // });
+        }
+        $scope.showReports = function (){
+            $("#tabs").hide();
+            $scope.regReports.push(["AU-SMR","Ingested Bae Alert","AUS","AUSTRAC","Dinesh Vyas",""]);
+            $("#reportSection").show();
+        }
+
+
+        $scope.selectXsd = function(selecedXSD) {
+
+        }
+
+        $scope.customTB = function(item, index) {
+            return `i-${index}`;
+        }
+
+        function customTB(item, index) {
+            return `i-${index}`;
+        }
+
+        $scope.filterByAlreadySelected = function(item) {
+            if (item.selected === false) {
+                return item;
+            }
+        };
+
+    });
+    // app.filter('filterByAlreadySelected', function() {
+    //     return function(item) {
+    //         if (!item.selected) {
+    //             return true;
+    //         }
+    //         return false;
+    //     }
+    // });
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+    }
+</script>
+</body>
+
+</html>

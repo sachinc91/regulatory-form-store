@@ -1,0 +1,19 @@
+{
+  "subjectInfo":{
+      "firstName": "Nir",
+      "lastName": "Biran",
+      "citizenship": "Israel",
+      "countryOfResidence" : "Israel"
+    },
+  "accountInfo":{
+      "accountID": "5451251514548",
+      "accountBalance": "100004000.00",
+      "accountOpeningDate": "03222015"
+    },
+  "transaction" :{
+    "trxId" : "834658768587676437YY",
+    "trxDate" : "01012021",
+    "trxValue" : "5000.00",
+    "trxCurrency" : "Shekel"
+  }
+}

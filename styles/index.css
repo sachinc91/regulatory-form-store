@@ -1,0 +1,87 @@
+html,
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+/* form specific formatting */
+.v-form-group {
+    display: flex;
+    flex-direction: row;
+}
+
+.v-form-group label {
+    flex: none;
+    display: block;
+    width: 170px;
+    font-weight: bold;
+    font-size: 1em;
+}
+.v-form-group label.right-inline {
+    text-align: right;
+    padding-right: 8px;
+    padding-left: 10px;
+    width: auto;
+}
+
+.v-form-group .input-control {
+    flex: 1 1 auto;
+    display: block;
+    margin-bottom: 10px;
+    margin-right: 8px;
+    padding: 4px;
+    margin-top: -4px;
+}
+
+.nextAction button {
+    padding: 5px 15px;
+    margin: 5px;
+    min-width: 100px
+}
+
+.alertTypeClass {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+
+@media (max-width: 768px) {
+    .v-form-group {
+        flex-direction: column;
+    }
+    .v-form-group .input-control {
+        margin-top: 2px;
+    }
+    .v-form-group label.right-inline {
+        text-align: left;
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 20px 8px;
+    }
+}
